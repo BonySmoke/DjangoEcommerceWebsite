@@ -1,0 +1,45 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    <title>Detail</title>
+{% endblock title%}
+{% block content %}
+        <div class="card-detail">
+            <p class="title-detail">{{object.title}}</p>
+            <a href="#"><img class="image-detail" src="{{object.image.url}}"></a>
+            <div class="details"><p>{{object.discription}}</p>
+                {% if object.discount_price %}
+                    <strike>{{object.price}}</strike>
+                    <p class = "discountprice">{{object.discount_price}}</p>
+                    {% else %}
+                    <p class="price">{{object.price}}</p>
+                    {% endif %}
+                {% if object.available%}
+                <p>Available</p>
+                <a class="button" id="add" href= {{object.get_add_to_cart_url}}> Add to Cart</a>
+                <a class="button" id="remove" href={{object.get_remove_from_cart_url}}>Remove from Cart</a>
+                {% else %}
+                <p>Not Available</p>
+                {% endif %}
+            </div>
+        </div>
+        <a class="button"href= "{% url 'comment' slug=object.slug%}"> Press to submit a comment</a>
+        {% for comment in comments %}
+        <div class="comment-section">
+            <ul>
+                <p>User: {{comment.user}}</p>
+                <p>Date posted: {{comment.date_posted}}</p>
+                <p>Usrname: {{comment.username}}</p>
+                <p>Context: {{comment.context}}</p>
+                <p>Positive: {{comment.positive}}</p>
+                <p>Negative: {{comment.negative}}</p>
+                <p>Likes: {{comment.likes.count}}
+                <a href={{comment.get_comment_like_url}}>
+                    <i class="material-icons">
+                    thumb_up_alt
+                    </i>
+                </a>
+                </p>
+            </ul>
+        </div>
+        {% endfor %}
+{% endblock content %}

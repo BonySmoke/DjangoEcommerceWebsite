@@ -1,0 +1,30 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    <title>Catalog: Product</title>
+{% endblock title%}
+{% block content %}
+        <form class="search_form" method="GET"> {% csrf_token %}
+            {{ filter.form.as_p }}
+            <input type="submit" name="send",
+            placeholder="search for a product", value="Send">
+        </form>
+        {% for obj in filter.qs %}
+        <div class="card">
+            <ul class="display">
+                <li>
+                    <a href="{% url 'product-detail' slug=obj.slug%}"><img class="image" src="{{obj.image.url}}"></a>
+                    <p>{{obj.title}}</p>
+                    {% if obj.discount_price %}
+                    <p class="discountprice">{{obj.discount_price}}</p>
+                    {% else %}
+                    <p class="price">{{obj.price}}</p>
+                    {% endif %}
+                    <form action="{% url 'product-detail' slug=obj.slug %}">
+                        <button class="button">Click to Explore</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="card">
+        {% endfor %}
+{% endblock content %}

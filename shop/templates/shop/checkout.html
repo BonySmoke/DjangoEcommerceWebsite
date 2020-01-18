@@ -1,0 +1,12 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    <title>Checkout</title>
+{% endblock %}
+{% block content %}
+    <form class="checkout-form" method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class='btn-submit' type="submit">Proceed to Checkout</button>
+    </form>
+{% endblock content %}

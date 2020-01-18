@@ -1,0 +1,59 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    <title>Shop Home</title>
+{% endblock title%}
+{% block content %}
+        <button id="FilterBtn" class="filter_toggle" onclick="toggle_visibility()">Hide Filters</button>
+        <form class="search_form" id="SearchFilter" method="GET"> {% csrf_token %}
+            {{ filter.form.as_p }}
+            <input type="submit" name="send",
+            placeholder="search for a product", value="Apply">
+        </form>
+        {% for obj in filter.qs %}
+        <div class="card">
+            <ul class="display">
+                <li>
+                    <a href="{% url 'product-detail' slug=obj.slug%}"><img class="image" src="{{obj.image.url}}"></a>
+                    {%if obj.status == 'brand-new'%}
+                    <p>{{obj.title}}<span>{{obj.status}}</span></p>
+                    {%else%}
+                    <p>{{obj.title}}</p>
+                    {%endif%}
+                    {% if obj.discount_price %}
+                    <p class = "discountprice">${{obj.discount_price}}</p>
+                    {% else %}
+                    <p class="price">${{obj.price}}</p>
+                    {% endif %}
+                    <form action="{% url 'product-detail' slug=obj.slug %}">
+                        <button class="button">Click to Explore</button>
+                    </form>
+                    <a href="{% url 'product-detail' slug=obj.slug %}"> Purchase</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card">
+        {% endfor %}
+
+        {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class= "btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class= "btn btn-outline-info mb-4" href="?page= {{ page_obj.previous_page_number }}"><</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range%}
+        {% if page_obj.number == num %}
+          <a class= "btn btn-info mb-4" href="?page={{ num }}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num > page_obj.number|add:'3' %}
+          <a class= "btn btn-outline-info mb-4" href="?page={{ num }}">{{num}}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class= "btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">></a>
+        <a class= "btn btn-outline-info mb-4" href="?page= {{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+{% endblock content %}

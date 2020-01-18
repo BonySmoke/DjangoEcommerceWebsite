@@ -1,0 +1,49 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    <title>Payment</title>
+{%endblock%}
+{% block content %}
+    <form class="payment-form" method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class='btn-submit' type="submit">Confirm the payment</button>
+    </form>
+    <div class="payment-checkout">
+        <table style="width:100%">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total Product Price</th>
+            <th>Delete</th>
+        </tr>
+        {% for order_item in object.items.all %}
+        <tr>
+            <th>{{forloop.counter}}</th>
+            <th>{{order_item.product.title}}</th>
+            <th>{{order_item.product.price}}</th>
+            <th><a href="{% url 'add_to_cart' order_item.product.slug%}"><i class="             material-icons">add</i></a>
+                {{order_item.quantity}}
+                <a href="{% url 'remove_one_from_cart' order_item.product.slug%}"><i class="        material-icons">remove</i></a>
+            </th>
+            <th>${{order_item.get_total_product_price}}</th>
+            <th><a href="{% url 'remove_from_cart' order_item.product.slug%}"><i class="material-icons">delete_sweep</i></a>
+            </th>
+        </tr>
+        {% empty %}
+            <tr>
+                <td>You have no products in here</td>
+                <form action="{% url 'shop-main' %}">
+                        <button>Back to Shopping</button>
+                    </form>
+            </tr>
+        {%endfor%}
+        <tr >
+            <th colspan="4">Order Total:</th>
+            <th>${{object.get_total}}</th>
+        </tr>
+    </table>
+    </div>
+{% endblock content %}

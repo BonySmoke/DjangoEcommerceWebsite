@@ -1,0 +1,12 @@
+{% extends "shop/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}
+    <title>Comment</title>
+{%endblock%}
+{% block content %}
+    <form method="POST" class="comment-form">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class='btn-submit' type="submit">Create</button>
+    </form>
+{% endblock %}

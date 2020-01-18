@@ -1,0 +1,64 @@
+{% extends "shop/base.html" %}
+{%block title%}
+<title>Order Summary</title>
+{%endblock title%}
+{% block content %}
+    <h2 class='h2'>Order Summary</h2>
+    <table style="width:70%">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total Product Price</th>
+            <th>Delete</th>
+        </tr>
+        {% for order_item in object.items.all %}
+        <tr>
+            <th>{{forloop.counter}}</th>
+            <th><a href="{% url 'product-detail' order_item.product.slug %}">{{order_item.product.title}}</a></th>
+            <th>{{order_item.product.price}}</th>
+            <th><a href="{% url 'add_to_cart' order_item.product.slug%}"><i class="             material-icons">add</i></a>
+                {{order_item.quantity}}
+                <a href="{% url 'remove_one_from_cart' order_item.product.slug%}"><i class="        material-icons">remove</i></a>
+            </th>
+            <th>${{order_item.get_total_product_price}}</th>
+            <th><a href="{% url 'remove_from_cart' order_item.product.slug%}"><i class="material-icons">delete_sweep</i></a>
+            </th>
+        </tr>
+        {% empty %}
+            <tr>
+                <td>You have no products in here</td>
+                <form action="{% url 'shop-main' %}">
+                        <button>Back to Shopping</button>
+                    </form>
+            </tr>
+        {%endfor%}
+        <tr >
+            <th colspan="4">Order Total:</th>
+            <th>${{object.get_total}}</th>
+        </tr>
+        <tr>
+            <form action="{% url 'add-coupon' %}" method="POST">
+                {% csrf_token %}
+                <th colspan="2">{{couponform.coupon}}
+                    <input class="btn btn-primary" type="submit" name="" value="Apply">
+                </th>
+            </form>
+        </tr>
+        <tr>
+            {% if object.coupon %}
+            <th>
+                <form action="{% url 'remove-coupon' %}">
+                    {{object.coupon.coupon}}
+                    <button type="submit" class="btn btn-primary">Remove</button>
+                </form>
+            </th>
+            {% endif %}
+        </tr>
+        <tr >
+            <th colspan="5"><a class='btn btn-warning'
+                href="{% url 'order_checkout' %}">Checkout</a></th>
+        </tr>
+    </table>
+{% endblock content %}

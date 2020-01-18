@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/main.css' %}">
+    <title>Login</title>
+</head>
+<body>
+    <form method="POST", class="box">
+        <h1>Login</h1>
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" name="submit", value="Submit">
+        <p>Don't have an account. <a href="{% url 'register' %}">Sign up here</a></p>
+        <small>You may use UN: Visitor and pw: Website123 to check the admin</small>
+    </form>
+</body>
+</html>

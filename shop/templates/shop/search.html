@@ -1,0 +1,23 @@
+{% extends "shop/base.html" %}
+{% block title %}
+    <title>Shop Home</title>
+{% endblock title%}
+{% block content %}
+        <form class="search_form" method="GET"> {% csrf_token %}
+            {{ filter.form.as_p }}
+            <input type="submit" name="find" placeholder="Search for the object name">
+        </form>
+        {% for obj in filter.qs %}
+        <div class="card">
+            <ul class="display">
+                <li>
+                    <a href="{% url 'product-detail' obj.id %}"><img class="image" src="{{obj.image.url}}"></a>
+                    <p>{{obj.title}}</p>
+                    <p class="price">{{obj.price}}</p>
+                    <p><button type="submit">Add to Cart</button></p>
+                </li>
+            </ul>
+        </div>
+        <div class="card">
+        {% endfor %}
+{% endblock content %}

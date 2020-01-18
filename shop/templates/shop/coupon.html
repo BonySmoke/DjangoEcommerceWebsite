@@ -1,0 +1,13 @@
+{% extends "shop/base.html" %}
+{%block title%}
+<title>Coupon</title>
+{%endblock title%}
+{% block content %}
+    {% for coupon in coupons %}
+    <div class="coupon-container">
+    <ul class="list-group">
+        <li class="list-group-item">{{coupon.coupon}} - {{coupon.discription}}</li>
+    </ul>
+    </div>
+    {% endfor %}
+{% endblock %}
